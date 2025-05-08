@@ -8,6 +8,8 @@ const routesUser = express.Router();
 routesUser.get('/profile', verificarToken, userController.profile);
 routesUser.get('/', verificarToken, userController.getAll);
 routesUser.get('/:id', verificarToken, userController.getOneById);
+routesUser.put('/update', verificarToken, userController.update);
+
 
 
 export default routesUser;

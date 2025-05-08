@@ -1,4 +1,5 @@
 import userModel from '../models/user.js';
+import bcrypt from 'bcrypt';
 
 class userController{
     constructor(){
@@ -14,6 +15,40 @@ class userController{
             const { _id, email, username, name: { first, last } } = data;
             res.status(200).json({ _id, email, username, name: { first, last } });
         }catch (e){
+            res.status(500).send(e);
+        }
+    }
+
+    async update(req, res) {
+        try {
+            const { email, username, password, first, last } = req.body;
+            const usernameConectado = req.usernameConectado;
+    
+            const user = await userModel.getOne({ username: usernameConectado });
+    
+            if (!user) {
+                return res.status(404).json({ error: 'Usuario no encontrado' });
+            }
+    
+            const updatedFields = {
+                email,
+                username,
+                name: {
+                    first,
+                    last
+                }
+            };
+    
+            if (password) {
+                const claveEncriptada = await bcrypt.hash(password, 10);
+                updatedFields.password = claveEncriptada;
+            }
+    
+            const data = await userModel.update(user.id, updatedFields);
+    
+            res.status(200).json(data);
+        } catch (e) {
+            console.error(e);
             res.status(500).send(e);
         }
     }
