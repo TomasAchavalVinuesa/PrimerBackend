@@ -84,7 +84,7 @@ class projectController{
             const data = await projectModel.getAllOfOne(id);
     
             if (data.length === 0) {
-                return res.status(404).json({ message: "No se encontraron epics para el proyecto" });
+                return res.status(200).json([]);
             }
     
             res.status(200).json(data);
