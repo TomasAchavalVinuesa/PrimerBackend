@@ -102,7 +102,7 @@ class storyController{
             const data = await storyModel.getAllOfOne(id);
     
             if (data.length === 0) {
-                return res.status(404).json({ message: "No se encontraron tareas para esta story" });
+                return res.status(200).json([]);
             }
     
             res.status(200).json(data);
